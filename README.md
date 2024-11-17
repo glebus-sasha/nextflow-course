@@ -48,32 +48,13 @@ mv nextflow $HOME/.local/bin/
 Вы можете работать в 3 режимах - в режими кино, вы уставшие смотрите меня, для этого налейте себе вкусного чаю или что вы там пьете.
 Другая крайность - это в режиме lifecode вы пишите всё вместе со мной, если что то не получается - спрашивайте, пойдем быстро, но будет полезно.
 Есть компромисный вариант - вы запускаете уже готовые файлы.
-
-
-
-## 4. nextflow
-Nextflow основан на языке Groovy, который, в свою очередь, является расширением Java.
-
-Создадим свой hello world и попутно посмотрим на особенности языка Groovy
-
-```
-git clone https://github.com/glebus-sasha/nextflow-course.git
-cd nextflow-course/scripts
-nano 1.hello_world.nf
-nextflow run 1.hello_world.nf
-# println 'Hello world!' // line comment
-# /*
-# * block comment
-# */
-# println 'Hello again!'
-```
-
+Создадим свой hello world и попутно посмотрим на особенности языка Groovy.
 Мы можем использовать shebang
 ```
 #!/usr/bin/env nextflow
 ```
 Добавим ее в 1.hello_world.nf
-
+Изменим добавить права на выполнение
 ```
 chmod +x 1.hello_world.nf
 ./1.hello_world.nf 
@@ -85,25 +66,7 @@ ls -lha
 ```
 
 Рассмотрим условные выражения 2.conditional_expressions.nf
-```
-def x = Math.random()
-if( x < 0.5 ) {
-    println 'You lost.'
-}
-else {
-    println 'You won!'
-}
-```
-
 Можно создавать функции 3.functions.nf
-```
-def add(a, b) {
-    return a + b
-}
-
-println(add(2, 3))
-```
-
 Более подробно
 https://www.nextflow.io/docs/latest/reference/syntax.html
 
