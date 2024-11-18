@@ -7,7 +7,7 @@ params.output_dir = "./results"
 // Python process: Reads all sequences and concatenates them
 process process_python {
     conda 'python'
-    publishDir params.output_dir, mode: 'copy'
+//    publishDir params.output_dir, mode: 'copy'
 
     input:
     path sequence_file
@@ -32,7 +32,7 @@ process process_python {
 // Perl process: Replaces all invalid characters with "N", case-sensitive
 process process_perl {
     conda 'perl'
-    publishDir params.output_dir, mode: 'copy'
+//    publishDir params.output_dir, mode: 'copy'
 
     input:
     path sequence_file
@@ -57,7 +57,7 @@ process process_perl {
 
 // Bash process: Converts the entire sequence to uppercase
 process process_bash {
-    publishDir params.output_dir, mode: 'copy'
+//    publishDir params.output_dir, mode: 'copy'
 
     input:
     path sequence_file
@@ -74,7 +74,7 @@ process process_bash {
 
 // R process: Creates a histogram of nucleotide frequencies
 process process_r {
-    publishDir params.output_dir, mode: 'copy'
+//    publishDir params.output_dir, mode: 'copy'
     conda 'r-base'
 
     input:
