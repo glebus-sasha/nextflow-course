@@ -1,14 +1,13 @@
 process bcfstats {
-    conda 'bcftools'
     container 'staphb/bcftools:latest'
-    publishDir "results/bcfstats"
+    publishDir "${params.output}/bcfstats"
     tag "$sid"
 
     input:
     tuple val(sid), path(vcf)
 
     output:
-    path "${sid}.bcfstats"
+    tuple val(sid), path("${sid}.bcfstats")
 
     script:
     """

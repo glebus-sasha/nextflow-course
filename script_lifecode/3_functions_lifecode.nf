@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
-def add(a,b) {
+def add(a, b) {
     return a + b
 }
 
-println(add(7,3))
+println(add(7, 3))

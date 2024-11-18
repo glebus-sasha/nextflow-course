@@ -1,7 +1,6 @@
 process bamindex {
-    conda 'bwa samtools'
     container 'glebusasha/bwa_samtools'
-    publishDir "results/bamindex"
+    publishDir "${params.output}/bamindex"
     tag "$sid"
 
     input:
@@ -12,7 +11,7 @@ process bamindex {
 
     script:
     """
-    samtools index ${bamFile}
+    samtools index $bamFile
     """
 
 }

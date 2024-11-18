@@ -1,7 +1,6 @@
 process qcontrol {
-    conda 'fastp'
     container 'nanozoo/fastp:0.23.1--9f2e255'
-    publishDir "results/qcontrol"
+    publishDir "${params.output}/fastp", mode: 'copy'
     tag "$sid"
     memory '2 GB'
 
@@ -9,7 +8,7 @@ process qcontrol {
     tuple val(sid), path(reads)
 
     output:
-    tuple val(sid), path("${sid}_R1"), path("${sid}_R2")
+    tuple val(sid), path("${reads[0]}"), path("${reads[1]}")
     path "${sid}.fastp_stats.html"
     path "${sid}.fastp_stats.json"
 

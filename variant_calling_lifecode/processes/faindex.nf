@@ -1,7 +1,6 @@
 process faindex {
-    conda 'bwa samtools'
     container 'glebusasha/bwa_samtools'
-    publishDir "results/faindex"
+    publishDir "${params.output}/faindex"
     tag "$reference"
 
     input:

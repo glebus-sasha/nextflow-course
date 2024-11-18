@@ -1,14 +1,13 @@
 process flagstat {
-    conda 'bwa samtools'
-    container = 'glebusasha/bwa_samtools'
-    publishDir "results/flagstat"
+    container 'glebusasha/bwa_samtools'
+    publishDir "${params.output}/flagstat"
     tag "$sid"
 
     input:
     tuple val(sid), path(bamFile)
 
     output:
-    path "${sid}.flagstat"
+    tuple val(sid), path("${sid}.flagstat")
 
     script:
     """

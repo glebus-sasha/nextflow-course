@@ -1,7 +1,6 @@
 process varcall {
-    conda 'bcftools'
-    container 'staphb/bcftools:latest'
-    publishDir "results/varcall"
+    container 'staphb/bcftools:latest'  
+    publishDir "${params.output}/varcall"
     tag "$sid"
 
     input:

@@ -1,6 +1,6 @@
 process refindex {
-    
-    container = 'glebusasha/bwa_samtools'
+    conda 'bwa samtools'
+    container 'glebusasha/bwa_samtools'
     publishDir "results/refindex"
     tag "$reference"
 

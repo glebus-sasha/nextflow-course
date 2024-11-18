@@ -1,7 +1,7 @@
 process report {
-    conda 'multiqc'
-    container 'staphb/multiqc:latest'
-    publishDir "results/report", mode: 'copy'
+    
+    container = 'staphb/multiqc:latest'
+    publishDir "results/report"
 
     input:
     path fastp

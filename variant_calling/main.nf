@@ -10,9 +10,7 @@ include { varcall } from './processes/varcall.nf'
 include { bcfstats } from './processes/bcfstats.nf'
 include { report } from './processes/report.nf'
 
-
-
-workflow  {
+workflow  one {
     
     reads = Channel.fromFilePairs(params.reads)
     reference = Channel.fromPath(params.reference).collect()
@@ -26,4 +24,28 @@ workflow  {
     bcfstats(varcall.out)
     report(qcontrol.out[2].collect(), flagstat.out.collect(), bcfstats.out.collect())
 
+}
+
+workflow  another {
+    
+    reference = Channel.fromPath(params.reference).collect()
+    
+    reference |
+    refindex & faindex
+
+    Channel.fromFilePairs(params.reads) | 
+    qcontrol
+
+    align(reference, qcontrol.out[0], refindex.out) |
+    flagstat & bamindex
+
+    varcall(reference, bamindex.out, faindex.out) |
+    bcfstats
+    
+    report(qcontrol.out[2].collect(), flagstat.out.collect(), bcfstats.out.collect())
+
+}
+
+workflow {
+    another()
 }
