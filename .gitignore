@@ -1,7 +1,3 @@
-/scripts/work
-/script_lifecode/work
-/variant_calling/work
-/variant_calling/results
-/variant_calling_lifecode/work
-/variant_calling_lifecode/results
-**.nextflow*
+**/work/
+**/results/
+.nextflow*
