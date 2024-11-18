@@ -1,5 +1,5 @@
 process report {
-    conda 'multiqc'
+    conda 'bioconda::multiqc'
     container 'staphb/multiqc:latest'
     publishDir "results/report", mode: 'copy'
 

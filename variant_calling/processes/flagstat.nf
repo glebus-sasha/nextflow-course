@@ -1,5 +1,5 @@
 process flagstat {
-    conda 'bwa samtools'
+    conda 'bioconda::bwa bioconda::samtools'
     container = 'glebusasha/bwa_samtools'
     publishDir "results/flagstat"
     tag "$sid"

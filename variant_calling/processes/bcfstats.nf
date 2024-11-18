@@ -1,5 +1,5 @@
 process bcfstats {
-    conda 'bcftools'
+    conda 'bioconda::bcftools'
     container 'staphb/bcftools:latest'
     publishDir "results/bcfstats"
     tag "$sid"

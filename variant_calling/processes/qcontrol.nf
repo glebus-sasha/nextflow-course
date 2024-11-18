@@ -1,5 +1,5 @@
 process qcontrol {
-    conda 'fastp'
+    conda 'bioconda::fastp'
     container 'nanozoo/fastp:0.23.1--9f2e255'
     publishDir "results/qcontrol"
     tag "$sid"

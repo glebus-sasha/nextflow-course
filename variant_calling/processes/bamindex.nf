@@ -1,5 +1,5 @@
 process bamindex {
-    conda 'bwa samtools'
+    conda 'bioconda::bwa bioconda::samtools'
     container 'glebusasha/bwa_samtools'
     publishDir "results/bamindex"
     tag "$sid"
