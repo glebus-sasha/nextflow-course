@@ -1,19 +1,15 @@
 process report {
     conda 'bioconda::multiqc'
     container 'staphb/multiqc:latest'
-    publishDir "results/report", mode: 'copy'
+    publishDir 'results/report', mode: 'copy'
 
     input:
-    path fastp
-    path flagstat
-    path bcfstats
-
+    path files
     output:
-    path 'multiqc_report.html', emit: html
-
+    path "*"
     script:
     """
-    multiqc $fastp $flagstat $bcfstats 
+    multiqc .
     """
 
 }

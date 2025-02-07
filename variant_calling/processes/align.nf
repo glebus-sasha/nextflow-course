@@ -1,13 +1,13 @@
 process align {
     conda 'bioconda::bwa bioconda::samtools'
     container 'glebusasha/bwa_samtools'
-    publishDir "results/align"
+    publishDir 'results/align'
     tag "$sid"
 
     input:
     path reference
     tuple val(sid), path(reads1), path(reads2)
-    path idx
+    path bwaindex
 
     output:
     tuple val(sid), path("${sid}.bam")

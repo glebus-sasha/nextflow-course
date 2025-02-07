@@ -1,14 +1,13 @@
 process bamindex {
     conda 'bioconda::bwa bioconda::samtools'
     container 'glebusasha/bwa_samtools'
-    publishDir "results/bamindex"
+    publishDir 'results/bamindex'
     tag "$sid"
 
     input:
     tuple val(sid), path(bamFile)
-
     output:
-    tuple val(sid), path("${sid}.bam.bai"), path(bamFile)
+    tuple val(sid), path("*.bai")
 
     script:
     """
