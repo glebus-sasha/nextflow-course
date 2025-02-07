@@ -1,13 +1,13 @@
 #!/usr/bin/env nextflow
 
-// Директория для входных данных и сохранения выходных данных
+// Directory for input data and output results
 params.input_file = "../data/test.fasta"
 params.output_dir = "./results"
 
-// Процесс на Python: Считывает все последовательности и склеивает их
+// Python process: Reads all sequences and concatenates them
 process process_python {
-    publishDir params.output_dir, mode: 'copy'
-    conda 'python'
+//    conda 'python'
+//    publishDir params.output_dir, mode: 'copy'
 
     input:
     path sequence_file
@@ -29,10 +29,10 @@ process process_python {
     """
 }
 
-// Процесс на Perl: Заменяет все некорректные символы на "N", учитывая регистр
+// Perl process: Replaces all invalid characters with "N", case-sensitive
 process process_perl {
-    publishDir params.output_dir, mode: 'copy'
-    conda 'perl'
+//    conda 'perl'
+//    publishDir params.output_dir, mode: 'copy'
 
     input:
     path sequence_file
@@ -46,7 +46,7 @@ process process_perl {
     open(my \$fh, '<', '${sequence_file}');
     my \$sequence = do { local \$/; <\$fh> };
     
-    # Заменяем все символы, не являющиеся A, T, C, G на N (с учетом регистра)
+    # Replace all characters not A, T, C, G with N (case-sensitive)
     \$sequence =~ s/[^ATCGatcg]/N/g;
     
     open(my \$out, '>', 'perl_result.txt');
@@ -55,9 +55,10 @@ process process_perl {
     """
 }
 
-// Процесс на Bash: Преобразует всю последовательность в верхний регистр
+// Bash process: Converts the entire sequence to uppercase
 process process_bash {
-    publishDir params.output_dir, mode: 'copy'
+//    publishDir params.output_dir, mode: 'copy'
+//    conda 'bash'
 
     input:
     path sequence_file
@@ -67,16 +68,15 @@ process process_bash {
 
     script:
     """
-    #!/bin/bash
     sequence=\$(cat ${sequence_file})
     echo "\${sequence^^}" > bash_result.txt
     """
 }
 
-// Процесс на R: Строит гистограмму частот нуклеотидов
+// R process: Creates a histogram of nucleotide frequencies
 process process_r {
-    publishDir params.output_dir, mode: 'copy'
-    conda 'r-base'
+//    publishDir params.output_dir, mode: 'copy'
+//    conda 'r-base'
 
     input:
     path sequence_file
@@ -88,25 +88,25 @@ process process_r {
     """
     #!/usr/bin/env Rscript
 
-    # Читаем последовательность из файла
+    # Read sequence from file
     sequence <- readLines('${sequence_file}')
-    # Подсчет частот каждого нуклеотида
+    # Count the frequency of each nucleotide
     counts <- table(strsplit(sequence, NULL)[[1]])
 
-    # Построение гистограммы частот
+    # Plot the nucleotide frequency histogram
     png("nucleotide_frequency_plot.png")
     barplot(counts, main="Nucleotide Frequency", xlab="Nucleotide", ylab="Frequency", col=c("skyblue", "salmon", "lightgreen", "orange"))
     dev.off()
     """
 }
 
-// Workflow: Определяем порядок выполнения процессов
+// Workflow: Define the execution order of processes
 workflow {
-    // Входной канал для файла с нуклеотидной последовательностью
+    // Input channel for the nucleotide sequence file
     Channel
         .fromPath(params.input_file)
         .set { sequence_file }
 
-    // Запуск процессов последовательно: Python -> Perl -> Bash -> R
+    // Sequential execution: Python -> Perl -> Bash -> R
     sequence_file | process_python | process_perl | process_bash | process_r
 }

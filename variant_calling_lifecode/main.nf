@@ -12,16 +12,15 @@ include { report } from './processes/report.nf'
 
 workflow {
     
-//    reads = 
-//    reference = 
-//    qcontrol
-//    refindex
-//    align
-//    flagstat
-//    faindex
-//    bamindex
-//    varcall
-//    bcfstats
-//    report
+    reads = Channel.fromFilePairs(params.reads)
+    reference = Channel.fromPath(params.reference).collect()
+    qcontrol(reads)
+    refindex(reference)
+    align(reference, qcontrol.out[0], refindex.out)
+    faindex(reference)
+    bamindex(align.out)
+    varcall(reference, bamindex.out, faindex.out)
+    bcfstats(varcall.out)
+    report(qcontrol.out[1].mix(bcfstats.out).collect())
 
 }

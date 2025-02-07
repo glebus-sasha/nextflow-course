@@ -6,9 +6,10 @@ process qcontrol {
     memory '2 GB'
 
     input:
-
+    tuple val(sid), path(reads)
     output:
-
+    tuple val(sid), path("${sid}_R1"), path("${sid}_R2")
+    path("*.json")
     script:
     """
     fastp \

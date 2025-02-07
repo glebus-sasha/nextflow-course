@@ -4,12 +4,12 @@ process report {
     publishDir "results/report", mode: 'copy'
 
     input:
-
+    path files
     output:
-
+    path "*"
     script:
     """
-    multiqc $fastp $flagstat $bcfstats 
+    multiqc .
     """
 
 }

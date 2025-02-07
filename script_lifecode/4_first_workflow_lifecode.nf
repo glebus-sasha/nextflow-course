@@ -1,5 +1,3 @@
-#!/usr/bin/env nextflow
-
 params.str = 'Hello world!'
 
 process splitLetters {
@@ -24,5 +22,5 @@ process convertToUpper {
 }
 
 workflow {
-    splitLetters | flatten | convertToUpper | view { v -> v.trim() }
+    splitLetters | flatten | convertToUpper | view { v -> v[0..3] }
 }

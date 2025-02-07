@@ -5,8 +5,9 @@ process bamindex {
     tag "$sid"
 
     input:
-
+    tuple val(sid), path(bamFile)
     output:
+    tuple val(sid), path(bamFile), path("*.bai")
 
     script:
     """

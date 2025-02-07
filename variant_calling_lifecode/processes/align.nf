@@ -5,8 +5,12 @@ process align {
     tag "$sid"
 
     input:
+    path reference
+    tuple val(sid), path(reads1), path(reads2)
+    path bwaindex
 
     output:
+    tuple val(sid), path("${sid}.bam")
 
     script:
     """

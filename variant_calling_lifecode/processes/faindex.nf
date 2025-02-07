@@ -5,9 +5,9 @@ process faindex {
     tag "$reference"
 
     input:
-
+    path reference
     output:
-
+    path "*.fai"
     script:
     """
     samtools faidx $reference
