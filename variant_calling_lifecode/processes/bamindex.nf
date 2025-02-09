@@ -6,6 +6,7 @@ process bamindex {
 
     input:
     tuple val(sid), path(bamFile)
+    
     output:
     tuple val(sid), path("*.bai")
 
