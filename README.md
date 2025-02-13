@@ -1,5 +1,17 @@
 # Key Concepts of Nextflow
 
+## Table of Contents
+1. [Channels](#1-channels)
+   - [Creating Channels](#creating-channels)
+   - [Types of Channels](#types-of-channels)
+2. [Operators](#2-operators)
+   - [Key Operators](#key-operators)
+3. [Processes](#3-processes)
+   - [Process Structure](#process-structure)
+   - [Key Directives](#key-directives)
+4. [Factories](#4-factories)
+   - [Key Factories](#key-factories)
+
 ## 1. Channels
 Channels are the foundation of Nextflow. They are used to pass data between processes.
 
@@ -22,7 +34,6 @@ files = Channel.fromPath("data/*.fastq")
 ### Types of Channels
 - **Value channel**: contains a single value.
 - **Queue channel**: can pass a stream of data.
-
 
 ## 2. Operators
 Operators are applied to channels to modify their content.
@@ -50,7 +61,6 @@ ch2 = Channel.from("A", "B", "C")
 ch1.combine(ch2)
 ```
 
-
 ## 3. Processes
 Processes are the main building blocks of Nextflow. They define computations.
 
@@ -73,7 +83,6 @@ process EXAMPLE {
 - `output:` — process output data.
 - `script:` — code to execute.
 
-
 ## 4. Factories
 Factories help process data streams.
 
@@ -86,6 +95,4 @@ Factories help process data streams.
 ch = Channel.from([1, [2, 3], 4])
 ch.flatten() // Result: [1, 2, 3, 4]
 ```
-
-These concepts form the foundation of working with Nextflow. In the next sections, we will explore their practical applications.
 
