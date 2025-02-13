@@ -1,210 +1,98 @@
 # nextflow-course
 Nextflow course
 
-## 2. Сравнение workflow systems
-Всех привествую. Пожалуй начнём.
-Бывает так, что вы думаете, что работа получится с первого раза, а потом приходится переделывать её десять раз. Или вы понимаете, что вам придётся выполнять одно и то же действие постоянно для десятков или сотен файлов. В такие моменты важно иметь инструменты, которые помогут автоматизировать и оптимизировать ваши задачи.
-Тут на помощь могут прийти хорошая документация, внимательность, скрипты например bash, ну или системы управления рабочими процессами, такие как nextflow
+Key Concepts of Nextflow
 
-Давайте сравним такие workflow systems
+1. Channels
 
-## 3.
-Главное преимущество таких систем - это автоматизация и воспроизводииость.
-Это может быть удобно как для разового исследования, так и для программного обеспечения для обработки каких либо данных.
-Ссылки я прикладываю, можете поподробнее прочитать..
-Если сравнивать наиболее популярные, но не единственные системы, такие как snakemake и nextflow, которые были разработаны для биоинформатиков, то snakemake более ламповый, простой, а nextflow более серьезный и мощный.
-Snakemake написан на питоне, в то время как nextflow - основан на groovy. Ксати, что касается groovy, поспешу успокоить - нет ни каких проблем с groovy, если вы его знаете. Да и если не знаете - то тоже никаких проблем, он вам пригодится совсем немного, разве что для кастомизации. А какие то необходимые основы мы сегодня рассмотрим.
+Channels are the foundation of Nextflow. They are used to pass data between processes.
 
-## 4.
-В то время как snakemake что то так начинает поддерживать, nextflow как правило из коробки интегрирован с большинством современных систем.
+Creating Channels
 
-##
-Виртуальные среды: conda, mamba
-Системы контейнеризации: docker, singularity, apptainer
-Системы управления версиями: github
-Облачные платформы: Amazon Web Services, Google Cloud Platform, Kubernetes
-Системы управления вычислительными ресурсами: SLURM
-И это ещё не всё. Здесь действует принцип: один раз написал код - исполняй где угодно, обычно это решается одним конфгурационным файлом и у вас тот же пайплайн будет выполняться на облаке, кластере.
+Channels are created using functions:
 
-## requirments
-Так, что нам сегодня может понадобиться.
+Channel.from(...) — creates a channel from a list of values.
 
-## 5. requirments
-Я уже писал предварительно, что необходимо установить. Если есть какие то вопросы, пожалуйста задавайте.
-Мы стремимся к воспроизводимости, но всё равно могут возникать ошибки из за разных условий выполнения пайплайна.
-Поэтому если есть какие то быстрые вопросы - то мы можем их попытаться по ходу дела решить. Но если будут какиие то еще ошибки, тут уж придется вам как то отлаживать самим. 
+Channel.of(...) — creates a channel from one or more values.
 
-- git
-- nextflow
-- mamba
-- apptainer
+Channel.fromPath(...) — creates a channel from files matching a given path.
 
-## 7. 
-Нам сегодня понадобится nextflow, git, apptainer, mamba.
-Если у вас что то из этого не установлено, то вы можете попытаться установить сейчас, если будут какие то вопросы - спрашивайте
-Если у вас отсутствует конда - то вы можете просто через apt установить, то, что нам сегодня будет не хватать.
-Что касается систем контейнеризации - то вместо apptainer вы можете использовать тот же докер или сингулярити - без проблем. Но мы будем рассматривать на примере apptainer
+// Create a channel from a list of numbers
+ch = Channel.from(1, 2, 3, 4, 5)
 
-## 9 installation
+// Create a channel from files
+files = Channel.fromPath("data/*.fastq")
 
-## 10
-nextflow в свою очерез требует java, потому что groovy - это синтактический сахар над java
+Types of Channels
 
-```
-java -version
-curl -s https://get.nextflow.io | bash
-chmod +x nextflow
-mkdir -p $HOME/.local/bin/
-mv nextflow $HOME/.local/bin/
-```
-## 11 Nextflow programming language
+Value channel: contains a single value.
 
-## 12
-Для тех кто не знает java может быть не сильно важно, но groovy отличается от java более простым синтаксисом, он поддерживает динамическую типизацию. Но мы на этом сильно останавливаться не будем. 
+Queue channel: can pass a stream of data.
 
-## 13
-Пришло время перейти в терминал.
-Вы можете работать в 3 режимах - в режими кино, вы уставшие смотрите меня, для этого налейте себе вкусного чаю или что вы там пьете.
-Другая крайность - это в режиме lifecode вы пишите всё вместе со мной, если что то не получается - спрашивайте, пойдем быстро, но будет полезно.
-Есть компромисный вариант - вы запускаете уже готовые файлы.
+2. Operators
 
-Для тех кто работает вместе со мной, давайте убедимся, что у Вас установлена последняя версия nextflow, если это не так, то выполните
+Operators are applied to channels to modify their content.
 
-```
-nextflow self-update
-```
+Key Operators:
 
-Если же вы смотрите в записи, то рекомендую установить текущую на момент записи версию
+map — transforms data within a channel.
 
-```
-export NXF_VER=21.10.4 
-nextflow -v
-```
-В репозитории содержится 2 копии папки, если вы хотите писать вместе со мной, то используйте готовые шаблоны из папки script, с припиской lifecode, если же вы просто хотите запускать, то без приписки.
+filter — keeps only elements that satisfy a condition.
 
-Создадим свой hello world и попутно посмотрим на особенности языка Groovy.
-Мы можем использовать shebang
-```
-#!/usr/bin/env nextflow
+combine — merges two channels.
 
-println 'Hello world!' // line comment
-```
-Добавим ее в 1.hello_world.nf
-Изменим добавить права на выполнение
-```
-chmod +x 1.hello_world.nf
-./1.hello_world.nf 
-```
+join — joins two channels based on a key.
 
-Обратим внимание на структуру 
-```
-ls -lha
-```
+// Apply map to multiply each element by 2
+ch.map { it * 2 }
 
-Рассмотрим условные выражения 2.conditional_expressions.nf
+// Keep only even numbers
+ch.filter { it % 2 == 0 }
 
-```
-#!/usr/bin/env nextflow
+// Merge two channels
+ch1 = Channel.from(1, 2, 3)
+ch2 = Channel.from("A", "B", "C")
+ch1.combine(ch2)
 
-def x = Math.random()
-if( x < 0.5 ) {
-    println 'You lost.'
-}
-else {
-    println 'You won!'
-}
-```
+3. Processes
 
-Можно создавать функции 3.functions.nf
+Processes are the main building blocks of Nextflow. They define computations.
 
-```
-#!/usr/bin/env nextflow
+Process Structure
 
-def add(a, b) {
-    return a + b
+process EXAMPLE {
+    input:
+    val x  // Accepts variable x
+    
+    output:
+    val result  // Returns result
+    
+    script:
+    result = x * 2
 }
 
-println(add(2, 3))
-```
+Key Directives:
 
-## 14 First workflow
+input: — process input data.
 
-## 15
+output: — process output data.
 
-Давайте рассмотрим первый workflow. 
-workflow состоит из процессов.
-Процессы могут имень inputs и outputs
-В workflow мы можем использовать не только собственноручные процессы, но так же и встроенные или написанные функции и методы.
-Снова взглянем на структуру папки work.
+script: — code to execute.
 
-```
-tree work
-```
+4. Factories
 
-## 16 Channels
+Factories help process data streams.
 
-## 17
+Key Factories:
 
-Но в реальности вам нужно работать с входными файлами, чтобы получать выходные файлы. Для этого рассмотрим концепцию канала.
+each — applies an action to each element.
 
-Канал имеет два основных свойства:
+collect — gathers all elements into a list.
 
-Отправка сообщения является асинхронной (т. е. неблокирующей) операцией, что означает, что отправителю не нужно ждать процесса получения.
+flatten — flattens a list.
 
-Получение сообщения является синхронной (т. е. блокирующей) операцией, что означает, что принимающий процесс должен дождаться прибытия сообщения.
+ch = Channel.from([1, [2, 3], 4])
+ch.flatten() // Result: [1, 2, 3, 4]
 
-В nextflow каналы бывают двух типов Queue channel, Value channel
+These concepts form the foundation of working with Nextflow. In the next sections, we will explore their practical applications.
 
-Queue channel — это неблокирующая однонаправленная очередь FIFO, соединяющая процесс-производитель (т. е. выводящий значение) с процессом-потребителем или операторами.
-Value channel может быть связан (т. е. назначен) с одним и только одним значением и может использоваться процессом или оператором любое количество раз.
-
-Channel factories - это функции, которые создают каналы.
-
-Операторы — это методы, которые потребляют и создают каналы.
-
-## 18
-
-Создадим workflow для работы с файлами, попутно разбирая концепцию каналов.
-
-Так же продемонстрируем, что можно использовать разные языки в процессах.
-
-Рассказать структуру кода.
-
-Запуск через мамба.
-
-## 19 Variant calling
-
-## 20
-
-Коротко повторим, что это такое.
-
-Когда мы создадим сегодня такой пайплайн с нуля, мы получим вот такой я DAG.
-
-## 21 Containerization
-
-## 22
-
-Мы можем сделать наш пайплайн еще более воспроизводимым, добавив контейнеризацию.
-Тем более, что это делается очень легко.
-Nextflow поддерживает разные технологии контейнеризации.
-
-## 23
-
-Сравним две популярные.
-
-## 24
-
-Мне больше нравится apptainer. Но вы естесственно можете использовать, то, что вам больше нравится.
-Построить DAG
-
-## 25 Deploy
-
-## 26
-
-Чтобы задеплоить наш пайплайн через гитхаб, можно создать новый репозиторий.
-Единственное условие - это то, что наш главный скрипт должен называться main.nf
-После этого он будет доступен по названию репозитория
-
-## 27 
-
-https://nf-co.re
