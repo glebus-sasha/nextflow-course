@@ -7,15 +7,17 @@
 - [Key Concepts of Nextflow](#key-concepts-of-nextflow)
   - [Table of Contents](#table-of-contents)
   - [1. Part one](#1-part-one)
-    - [1. Channels](#1-channels)
+    - [1. Installation](#1-installation)
+    - [2. Nextflow syntax](#2-nextflow-syntax)
+    - [3. Channels](#3-channels)
       - [Creating Channels](#creating-channels)
       - [Types of Channels](#types-of-channels)
-    - [2. Operators](#2-operators)
+    - [4. Operators](#4-operators)
       - [Key Operators:](#key-operators)
-    - [3. Processes](#3-processes)
+    - [5. Processes](#5-processes)
       - [Process Structure](#process-structure)
       - [Key Directives:](#key-directives)
-    - [4. Factories](#4-factories)
+    - [6. Factories](#6-factories)
       - [Key Factories:](#key-factories)
   - [2. Part two](#2-part-two)
     - [1. Структура репозитория nf-core](#1-структура-репозитория-nf-core)
@@ -26,10 +28,25 @@
       - [6. nf-core pipeline template](#6-nf-core-pipeline-template)
       - [7. Фактория для входного samplesheet (пример)](#7-фактория-для-входного-samplesheet-пример)
       - [8. Структура модуля](#8-структура-модуля)
+      - [9. Добавление нового модуля](#9-добавление-нового-модуля)
+      - [10. Добавление нового параметра](#10-добавление-нового-параметра)
 
-## 1. Part one
+## 1. Part one 
 
-### 1. Channels
+### 1. Installation
+- [Install Nextflow](https://www.nextflow.io/docs/latest/install.html)
+- [Install Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+- [Install Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
+- [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Install Apptainer ](https://apptainer.org/docs/admin/main/installation.html)
+- [Install Singularity](https://github.com/apptainer/singularity/blob/master/INSTALL.md?ysclid=m6mchtlk2e332906599)
+- [Install Docker](https://docs.docker.com/engine/install/)
+- [Install Nextflow](https://www.nextflow.io/docs/latest/install.html)
+
+### 2. Nextflow syntax
+[Nextflow syntax](https://www.nextflow.io/docs/latest/reference/syntax.html)
+
+### 3. Channels
 Channels are the foundation of Nextflow. They are used to pass data between processes.
 
 #### Creating Channels
@@ -52,7 +69,7 @@ files = Channel.fromPath("data/*.fastq")
 - **Value channel**: contains a single value.
 - **Queue channel**: can pass a stream of data.
 
-### 2. Operators
+### 4. Operators
 Operators are applied to channels to modify their content.
 
 #### Key Operators:
@@ -78,7 +95,7 @@ ch2 = Channel.from("A", "B", "C")
 ch1.combine(ch2)
 ```
 
-### 3. Processes
+### 5. Processes
 Processes are the main building blocks of Nextflow. They define computations.
 
 #### Process Structure
@@ -100,16 +117,15 @@ process EXAMPLE {
 - `output:` — process output data.
 - `script:` — code to execute.
 
-### 4. Factories
+### 6. Factories
 Factories help process data streams.
 
 #### Key Factories:
-- `each` — applies an action to each element.
 - `collect` — gathers all elements into a list.
 - `flatten` — flattens a list.
 
 ```nextflow
-ch = Channel.from([1, [2, 3], 4])
+ch = channel.from([1, [2, 3], 4])
 ch.flatten() // Result: [1, 2, 3, 4]
 ```
 
@@ -434,6 +450,253 @@ stub:
       samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
    END_VERSIONS
    """
-}```
+}
+```
 
 - `stub` - используется для сухого запуска с флагом `-stub-run`. При этом блок кода `script` подменяется блоком кода из `stub`, в котором создаются пустые файлы и папки, воспроизводящие реальную структуру выходных файлов. Файл с версиями создается как обычно.
+
+
+#### 9. Добавление нового модуля
+
+Рассмотрим на примере fastp
+
+1. Устанавливаем модуль
+
+```
+nf-core modules install
+```
+
+выбираем `fastp`
+
+2. Добавляем include в `workflows/nfcoreintro.nf`
+
+```
+include { FASTP                  } from '../modules/nf-core/fastp/main' 
+```
+
+3. Добавляем в скрипт наш модуль, формируем входной канал, канал для multiqc и канал версий
+
+```
+   //
+   // MODULE: Run FastP
+   //
+   ch_samplesheet = ch_samplesheet.map { meta, reads ->
+         [ meta, reads, []]
+      }
+   FASTP (
+      ch_samplesheet,
+      false,
+      false,
+      false
+   )
+   ch_trimmed_reads = FASTP.out.reads
+   ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
+   ch_versions      = ch_versions.mix(FASTP.out.versions.first())
+```
+
+4. Добавляем в `conf/modules.conf` параметры для публикации выходных файлов (опционально)
+Для этого модуля мы не будем добавлять, поэтому пример для 
+
+```
+   withName: 'MULTIQC' {
+      publishDir = [
+         path: { "${params.outdir}/multiqc" },
+         mode: params.publish_dir_mode,
+         saveAs: { filename -> filename.equals('versions.yml') ? null : filename }
+      ]
+   }
+```
+
+
+5. Добавляем все необходимые параметры для модуля со значениями по умолчанию в nextflow.config (опционально)
+
+6. Добавляем в `conf/modules.conf` доп параметры (опционально)
+
+Для этого модуля мы не будем добавлять, поэтому пример для 
+```
+   withName: BCFTOOLS_MPILEUP {
+      ext.args    = '-Ou'
+      ext.args2   = '-m'
+   }
+```
+7. Обновляем nextflow_schema.json
+   
+```
+nf-core schema build
+```
+
+8. Обновляем assets/multiqc_config.yml to include any new MultiQC modules (if any exist) and specify order in the report (опционально)
+
+В данном пайплайне мы не будем кастомизировать multiqc
+
+
+9. Add a citation for the new tool/module to citations.md
+
+10. Update docs/USAGE.md to describe any important information about running of the module (this can be optional in some cases)
+
+11. Update docs/OUTPUT.md to describe the directories output files of the module
+
+12. Update README.md mentioning the tool is used and any pipeline diagrams (optional)
+    
+13. If not already installed, install prettier (prettier can also be installed using Conda) and then run it formatting on the whole repository
+
+установка
+```
+mamba install bioconda::prettier 
+```
+
+использование
+
+```
+prettier -w .
+```
+
+14. Run a local test of the pipeline with the included new functionality to check it works.
+
+```
+mkdir test/ && cd test/
+nextflow run ../main.nf -profile test,<docker,singularity,conda> --outdir ./results <include new parameters required to activate new functionality if necessary>
+```
+
+15. Lint the new code with
+```
+nf-core lint
+```
+
+[Подробнее про добавление модуля](https://nf-co.re/docs/tutorials/nf-core_components/adding_modules_to_pipelines)
+
+
+#### 10. Добавление нового параметра
+
+Рассмотрим добавление нового параметра на примере `fasta` и `bwa_index` .
+
+Используем интеграцию с igenomes, для этого взглянем на `conf/igenomes.config`. Так как тестовые данные у нас про дрожжи, давайте их и будем использовать. Найдем `R64-1-1`
+
+```
+params {
+   // illumina iGenomes reference file paths
+   genomes {
+      'GRCh37' {...}
+      'R64-1-1' {
+         fasta       = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa"
+         bwa         = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/BWAIndex/version0.6.0/"
+         bowtie2     = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/Bowtie2Index/"
+         star        = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/STARIndex/"
+         bismark     = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/BismarkIndex/"
+         gtf         = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Annotation/Genes/genes.gtf"
+         bed12       = "${params.igenomes_base}/Saccharomyces_cerevisiae/Ensembl/R64-1-1/Annotation/Genes/genes.bed"
+         mito_name   = "MT"
+         macs_gsize  = "1.2e7"
+      }
+      ...
+   }
+   ...
+}   
+```
+За bwa index отвечает параметр `fasta` и `bwa`.
+
+Таким образом, params.bwa_index будет содержать полный путь, составленный из ${params.igenomes_base} - прописан в nextflow.config (может изменить, если вы имеете локальную копию или зеркало igenomes) и пути до соответствующего индекса.
+
+1. Добавим их в корневой `main.nf`
+
+```
+params.fasta        = getGenomeAttribute('fasta')
+params.bwa_index    = getGenomeAttribute('bwa')
+```
+
+
+2. Инициализируем параметры в `/subworkflows/local/utils_nfcore_testtest_pipeline/main.nf`
+
+```
+workflow PIPELINE_INITIALISATION {
+   take:
+   ...
+   fasta             // string: Path to reference FASTA file
+   bwa_index         // string: Path to BWA index prefix
+...
+}
+```
+
+3.  Cоздаем фактории 
+после блока с факторией для samplesheet
+
+```
+...
+         .set { ch_samplesheet }
+
+   ch_fasta       = Channel.value(file(params.fasta))
+                     .map{ file -> [ [file.getSimpleName()], file] }
+
+   ch_bwa_index   = Channel.value(file(params.bwa_index))
+                     .map{ file -> [ [file.getSimpleName()], file] }
+```
+
+4. Добавляем выходы
+
+```
+   emit:
+   samplesheet = ch_samplesheet
+   versions    = ch_versions
+   fasta       = ch_fasta
+   bwa_index   = ch_bwa_index
+```
+
+5. Возвращяемся в корневой `main.nf`
+
+Добавляем параметры
+```
+   GLEBUSSASHA_NFCOREINTRO (
+      PIPELINE_INITIALISATION.out.samplesheet,
+      PIPELINE_INITIALISATION.out.fasta,
+      PIPELINE_INITIALISATION.out.bwa_index,
+   )
+```
+
+6. Добавляем параметры в `take` и `NFCOREINTRO`
+
+```
+workflow GLEBUSSASHA_NFCOREINTRO {
+
+   take:
+   samplesheet // channel: samplesheet read in from --input
+   fasta       // channel: fasta
+   bwa_index   // channel: bwa index
+
+   main:
+
+   //
+   // WORKFLOW: Run pipeline
+   //
+   NFCOREINTRO (
+      samplesheet,
+      fasta,
+      bwa_index
+   )
+   emit:
+   multiqc_report = NFCOREINTRO.out.multiqc_report // channel: /path/to/multiqc_report.html
+}
+```
+
+7. Добавляем параметры в `workflows/nfcoreintro.nf`
+
+```
+workflow NFCOREINTRO {
+
+    take:
+    ch_samplesheet // channel: samplesheet read in from --input
+    fasta
+    bwa_index
+...
+```
+
+8. Добавляем параметры в 'nextflow_schema.json', для этого используем команду, которая позволяет редактировать это в веб интерфейса или в командной строке.
+
+```
+nf-core pipelines schema build
+```
+
+Добавим параметры fasta и bwa_index в блок `Reference genome options`
+
+[Что такое igenomes?](https://support.illumina.com/sequencing/sequencing_software/igenome.html)
+
+
