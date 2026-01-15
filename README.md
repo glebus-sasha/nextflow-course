@@ -272,6 +272,8 @@ SAMPLE3_SE,https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/il
 
 Главный файл, в корне репозитория `main.nf` содержит описание workflow главного анализа в формате 
 ```
+include { <PIPELINE_NAME>  } from './workflows/<pipeline_name>.nf'
+...
 workflow <ORG_NAME>_<PIPELINE_NAME> {
    ...
    workflow <PIPELINE_NAME>{
