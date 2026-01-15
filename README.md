@@ -147,7 +147,7 @@ ch.flatten() // Result: [1, 2, 3, 4]
 │   ├── README.md            # Introduction and overview of documentation.
 │   ├── output.md            # Explanation of pipeline outputs and directory structure.
 │   └── usage.md             # Detailed usage guide and example commands.
-├── main.nf                  # The main entrypoint for the pipeline, defining workflow logic.
+├── main.nf                  # The main entrypoint for the pipeline.
 ├── modules                  # Collection of nf-core/modules used by the pipeline.
 │   ├── local                # Modules written specifically for this pipeline.
 │   └── nf-core              # Modules imported from nf-core collections.
@@ -165,7 +165,7 @@ ch.flatten() // Result: [1, 2, 3, 4]
 │   └── nextflow.config      # Test-specific Nextflow configuration.
 ├── tower.yml                # Configuration for monitoring and launching pipelines via Nextflow Tower.
 └── workflows                # High-level workflow definitions.
-    └── test.nf              # A workflow used for testing subcomponents or modules.
+    └── <workflow_name>.nf   # The main workflow, defining workflow logic.
 ```
 
 [Подробнее](https://nf-co.re/docs/contributing/pipelines/pipeline_file_structure)
@@ -176,19 +176,19 @@ ch.flatten() // Result: [1, 2, 3, 4]
 modules                          # Collection of nf-core/modules used by the pipeline.
 ├── local                        # Modules written specifically for this pipeline.
 │   ├── bracken_results          # Module for handling Bracken results.
-│   │   └── main.nf              # Main workflow logic for the bracken_results module.
+│   │   └── main.nf              # Main process file for the bracken_results module.
 └── nf-core                      # Namespaced directory containing imported nf-core modules.
     ├── bracken                  # nf-core Bracken module.
     │   └── bracken              # Subdirectory containing Bracken workflow files.
     │       ├── environment.yml  # Conda environment specification for Bracken module.
-    │       ├── main.nf          # Main workflow logic for Bracken module.
+    │       ├── main.nf          # Main process file for Bracken module.
     │       ├── meta.yml         # Metadata describing Bracken module parameters and inputs.
     │       └── tests            # Test definitions for Bracken module.
     │           └── ...          # Test files and snapshots.
     ├── cat                      # nf-core Cat module.
     │   └── fastq                # Subdirectory containing Cat fastq workflow files.
     │       ├── environment.yml  # Conda environment specification for Cat fastq module.
-    │       ├── main.nf          # Main workflow logic for Cat fastq module.
+    │       ├── main.nf          # Main process file for Cat fastq module.
     │       └── meta.yml         # Metadata describing Cat fastq module parameters and inputs.
 
 ```
@@ -624,11 +624,11 @@ workflow PIPELINE_INITIALISATION {
 ...
          .set { ch_samplesheet }
 
-   ch_fasta       = Channel.value(file(params.fasta))
-                     .map{ file -> [ [file.getSimpleName()], file] }
+   ch_fasta       = channel.value(file(fasta))
+                     .map{ file -> [ [], file] }
 
-   ch_bwa_index   = Channel.value(file(params.bwa_index))
-                     .map{ file -> [ [file.getSimpleName()], file] }
+   ch_bwa_index   = channel.value(file(bwa_index))
+                     .map{ file -> [ [], file] }  
 ```
 
 4. Добавляем выходы
