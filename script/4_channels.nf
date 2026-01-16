@@ -16,7 +16,7 @@ process my_process {
 }
 
 workflow{
-    ch1 = channel.from(1,2,3,4)
-    ch2 = channel.from(10).collect()
+    ch1 = channel.of(1,2,3,4)
+    ch2 = channel.of(10)
     my_process(ch1, ch2)
 }
