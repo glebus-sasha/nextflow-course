@@ -607,7 +607,24 @@ params.bwa_index    = getGenomeAttribute('bwa')
 ```
 
 
-2. Инициализируем параметры в `/subworkflows/local/utils_nfcore_testtest_pipeline/main.nf`
+2. Так же инициализируем их в корневом main.nf
+```
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
+        params.fasta,
+        params.bwa_index
+    )
+```
+
+3. Инициализируем параметры в `/subworkflows/local/utils_nfcore_testtest_pipeline/main.nf`
 
 ```
 workflow PIPELINE_INITIALISATION {
@@ -619,7 +636,7 @@ workflow PIPELINE_INITIALISATION {
 }
 ```
 
-3.  Cоздаем фактории 
+4.  Cоздаем фактории 
 после блока с факторией для samplesheet
 
 ```
@@ -633,7 +650,7 @@ workflow PIPELINE_INITIALISATION {
                      .map{ file -> [ [], file] }  
 ```
 
-4. Добавляем выходы
+5. Добавляем выходы
 
 ```
    emit:
@@ -643,7 +660,7 @@ workflow PIPELINE_INITIALISATION {
    bwa_index   = ch_bwa_index
 ```
 
-5. Возвращяемся в корневой `main.nf`
+6. Возвращяемся в корневой `main.nf`
 
 Добавляем параметры
 ```
@@ -654,7 +671,7 @@ workflow PIPELINE_INITIALISATION {
    )
 ```
 
-6. Добавляем параметры в `take` и `NFCOREINTRO`
+7. Добавляем параметры в `take` и `NFCOREINTRO`
 
 ```
 workflow GLEBUSSASHA_NFCOREINTRO {
@@ -679,7 +696,7 @@ workflow GLEBUSSASHA_NFCOREINTRO {
 }
 ```
 
-7. Добавляем параметры в `workflows/nfcoreintro.nf`
+8. Добавляем параметры в `workflows/nfcoreintro.nf`
 
 ```
 workflow NFCOREINTRO {
@@ -691,7 +708,7 @@ workflow NFCOREINTRO {
 ...
 ```
 
-8. Добавляем параметры в 'nextflow_schema.json', для этого используем команду, которая позволяет редактировать это в веб интерфейса или в командной строке.
+9. Добавляем параметры в 'nextflow_schema.json', для этого используем команду, которая позволяет редактировать это в веб интерфейса или в командной строке.
 
 ```
 nf-core pipelines schema build
