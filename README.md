@@ -493,7 +493,6 @@ include { FASTP                  } from '../modules/nf-core/fastp/main'
    )
    ch_trimmed_reads = FASTP.out.reads
    ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
-   ch_versions      = ch_versions.mix(FASTP.out.versions.first())
 ```
 
 4. Добавляем в `conf/modules.conf` параметры для публикации выходных файлов (опционально)
@@ -690,6 +689,10 @@ workflow GLEBUSSASHA_NFCOREINTRO {
       samplesheet,
       fasta,
       bwa_index
+      params.multiqc_config,
+      params.multiqc_logo,
+      params.multiqc_methods_description,
+      params.outdir,
    )
    emit:
    multiqc_report = NFCOREINTRO.out.multiqc_report // channel: /path/to/multiqc_report.html
