@@ -180,13 +180,18 @@ profiles {
 git add .
 git commit -m "do"
 git push
+```
+
+## Code block 021
+
+```
 mkdir nextflow-course-my-launch
 cd nextflow-course-my-launch/
 export GITHUB_USERNAME="your-github-username"
 nextflow run "$GITHUB_USERNAME/nextflow-course-my" -r full -profile apptainer
 ```
 
-## Code block 021
+## Code block 022
 
 ```
 workflow {
@@ -197,30 +202,34 @@ workflow {
 }
 ```
 
-## Code block 022
+## Code block 023
 
 ```
 conda install nf-core
 ```
 
-## Code block 023
+## Code block 024
 
 ```
 pip install nf-core
 ```
 
-## Code block 024
+## Code block 025
 
 ```
 shell	shell config file	command
 bash	~/.bashrc	eval "$(_NF_CORE_COMPLETE=bash_source nf-core)"
 zsh	~/.zshrc	eval "$(_NF_CORE_COMPLETE=zsh_source nf-core)"
 fish	~/.config/fish/completions/nf-core.fish	eval (env _NF_CORE_COMPLETE=fish_source nf-core)
+```
 
+## Code block 026
+
+```
 https://nf-co.re/docs/nf-core-tools/cli/installation
 ```
 
-## Code block 025
+## Code block 027
 
 ```
 mkdir sarek_test
@@ -228,37 +237,41 @@ cd sarek_test/
 nextflow run nf-core/sarek -profile test,apptainer --outdir results
 ```
 
-## Code block 026
+## Code block 028
 
 ```
 WARN: Cannot read project manifest -- Cause: API rate limit exceeded -- Provide your GitHub user name and password to get a higher rate limit
 API rate limit exceeded -- Provide your GitHub user name and password to get a higher rate limit
 ```
 
-## Code block 027
+## Code block 029
 
 ```
 export GITHUB_TOKEN="ghp_ТВОЙ_ТОКЕН"
 nextflow pull nf-core/sarek
 ```
 
-## Code block 028
+## Code block 030
 
 ```
 $HOME/.nextflow/assets/nf-core
 ```
 
-## Code block 029
+## Code block 031
 
 ```
 nf-core pipelines list
 ```
 
-## Code block 030
+## Code block 032
 
 ```
 nano custom.config
+```
 
+## Code block 033
+
+```
 process {
   resourceLimits = [
     cpus: 6,
@@ -270,23 +283,31 @@ withName: 'BWAMEM1_MEM' {
     memory = 3.GB
   }
 }
+```
 
+## Code block 034
+
+```
 nextflow run nf-core/sarek -profile test,apptainer --outdir results -c custom.config -resume
 ```
 
-## Code block 031
+## Code block 035
 
 ```
 find "$HOME/.nextflow/assets" -path '*/sarek/tests/csv/*/fastq_single.csv' -print
 ```
 
-## Code block 032
+## Code block 036
 
 ```
 mkdir sarek_launch
 cd sarek_launch
 nano samplesheet.csv
+```
 
+## Code block 037
+
+```
 patient,sample,lane,fastq_1,fastq_2
 patient1,sample1,lane1,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample1_R1.fastq.gz,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample1_R2.fastq.gz
 patient2,sample2,lane2,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample2_R1.fastq.gz,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample2_R2.fastq.gz
@@ -294,35 +315,44 @@ patient3,sample3,lane3,https://raw.githubusercontent.com/glebus-sasha/nextflow-c
 patient4,sample4,lane4,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample4_R1.fastq.gz,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample4_R2.fastq.gz
 patient5,sample5,lane5,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample5_R1.fastq.gz,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample5_R2.fastq.gz
 patient6,sample6,lane6,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample6_R1.fastq.gz,https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/sample6_R2.fastq.gz
-
-
-
-https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/samplesheet_nfcoreintro.csv
-
 ```
 
-## Code block 033
+## Code block 038
+
+```
+https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/samplesheet_nfcoreintro.csv
+```
+
+## Code block 039
 
 ```
 nf-core pipelines launch sarek
 ```
 
-## Code block 034
+## Code block 040
 
 ```
 nano params.yaml
+```
 
+## Code block 041
+
+```
 input           : samplesheet.csv
 outdir          : results
 fasta           : https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/MT.fna
 igenomes_ignore : true
 skip_tools      : baserecalibrator
 no_intervals    : true
+```
 
+## Code block 042
+
+```
 nextflow run nf-core/sarek -r 3.10.0 -profile apptainer -resume -params-file nf-params.json -c custom.config 
 ```
 
-## Code block 035
+## Code block 043
 
 ```
 {
@@ -335,13 +365,13 @@ nextflow run nf-core/sarek -r 3.10.0 -profile apptainer -resume -params-file nf-
 }
 ```
 
-## Code block 036
+## Code block 044
 
 ```
 python3 -m http.server 8000
 ```
 
-## Code block 037
+## Code block 045
 
 ```
 {
@@ -353,19 +383,19 @@ python3 -m http.server 8000
 }
 ```
 
-## Code block 038
+## Code block 046
 
 ```
 nf-core pipelines create
 ```
 
-## Code block 039
+## Code block 047
 
 ```
 nano template.yml
 ```
 
-## Code block 040
+## Code block 048
 
 ```
 name: nfcoreintro
@@ -380,74 +410,89 @@ is_nfcore: false
 skip_features: []
 ```
 
-## Code block 041
+## Code block 049
 
 ```
 mkdir -p nfcoreintro
 ```
 
-## Code block 042
+## Code block 050
 
 ```
 nf-core pipelines create --template-yaml  template.yml
+```
+
+## Code block 051
+
+```
 export GITHUB_USERNAME="your-github-username"
 git remote add origin "https://github.com/${GITHUB_USERNAME}/nfcoreintro.git"
+```
+
+## Code block 052
+
+```
 git push --all origin
 ```
 
-## Code block 043
+## Code block 053
 
 ```
 cd nfcoreintro
 mkdir testing
 cd testing
+```
+
+## Code block 054
+
+```
 nextflow run .. -profile test,apptainer --outdir results -c custom.config -resume
 ```
 
-## Code block 044
+## Code block 055
 
 ```
 nf-core pipelines lint
 ```
 
-## Code block 045
+## Code block 056
 
 ```
 git checkout dev
 ```
 
-## Code block 046
+## Code block 057
 
 ```
 input  = 'https://raw.githubusercontent.com/glebus-sasha/nextflow-course-template/refs/heads/main/data/samplesheet_nfcoreintro.csv'
 ```
 
-## Code block 047
+## Code block 058
 
 ```
 nextflow run .. -profile apptainer,test --outdir results -resume -c custom.config
 ```
 
-## Code block 048
+## Code block 059
 
 ```
 git add .
 git commit -m 'add: fastp'
 ```
 
-## Code block 049
+## Code block 060
 
 ```
 nf-core modules remove fastqc
 ```
 
-## Code block 050
+## Code block 061
 
 ```
 nf-core pipelines lint
 ```
 
-## Code block 051
+## Code block 062
 
 ```
     withName: FASTQC {
@@ -455,22 +500,32 @@ nf-core pipelines lint
     }
 ```
 
-## Code block 052
+## Code block 063
 
 ```
 git add .
 git commit -m "fix config"
+```
+
+## Code block 064
+
+```
 nf-core pipelines lint --dir . --fix container_configs
+```
+
+## Code block 065
+
+```
 nf-core pipelines lint
 ```
 
-## Code block 053
+## Code block 066
 
 ```
 nf-core modules install bwa/mem
 ```
 
-## Code block 054
+## Code block 067
 
 ```
     //
@@ -485,7 +540,7 @@ nf-core modules install bwa/mem
     ch_bam              = BWA_MEM.out.bam
 ```
 
-## Code block 055
+## Code block 068
 
 ```
 withName: 'BWA_MEM' {
@@ -494,20 +549,20 @@ withName: 'BWA_MEM' {
 }
 ```
 
-## Code block 056
+## Code block 069
 
 ```
 nf-core pipelines schema build
 
 ```
 
-## Code block 057
+## Code block 070
 
 ```
 nf-core modules install samtools/index
 ```
 
-## Code block 058
+## Code block 071
 
 ```
     //
@@ -519,13 +574,13 @@ nf-core modules install samtools/index
     ch_bai              = SAMTOOLS_INDEX.out.index
 ```
 
-## Code block 059
+## Code block 072
 
 ```
 nf-core modules install samtools/flagstat
 ```
 
-## Code block 060
+## Code block 073
 
 ```
     //
@@ -538,13 +593,13 @@ nf-core modules install samtools/flagstat
     ch_multiqc_files    = ch_multiqc_files.mix(SAMTOOLS_FLAGSTAT.out.flagstat.collect{it[1]})
 ```
 
-## Code block 061
+## Code block 074
 
 ```
 nf-core modules install bcftools/mpileup
 ```
 
-## Code block 062
+## Code block 075
 
 ```
     //
@@ -560,7 +615,7 @@ nf-core modules install bcftools/mpileup
     ch_multiqc_files    = ch_multiqc_files.mix(BCFTOOLS_MPILEUP.out.stats.collect{it[1]})
 ```
 
-## Code block 063
+## Code block 076
 
 ```
 withName: 'BCFTOOLS_MPILEUP' {
@@ -569,28 +624,38 @@ withName: 'BCFTOOLS_MPILEUP' {
 }
 ```
 
-## Code block 064
+## Code block 077
 
 ```
 git add .
 git commit -m "add: mpileup"
+```
+
+## Code block 078
+
+```
 git push
 ```
 
-## Code block 065
+## Code block 079
 
 ```
 git push -u origin master
+```
+
+## Code block 080
+
+```
 git push -u origin TEMPLATE
 ```
 
-## Code block 066
+## Code block 081
 
 ```
 nf-test test --profile test,apptainer --update-snapshot
 ```
 
-## Code block 067
+## Code block 082
 
 ```
 nf-test test --profile test,apptainer
