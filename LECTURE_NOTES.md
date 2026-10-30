@@ -37,8 +37,8 @@ println 'Hello world!' // line comment
 ## Code block 006
 
 ```
-chmod +x 1.hello_world.nf
-./1.hello_world.nf 
+chmod +x 1_hello_world.nf
+./1_hello_world.nf 
 ```
 
 ## Code block 007
@@ -75,10 +75,14 @@ workflow {
 }
 ```
 
+```
+https://github.com/glebus-sasha/nextflow-course-template
+```
+
 ## Code block 010
 
 ```
-params.reads = 'data/*_R{1,2}.fastq'
+params.reads = 'data/*_R{1,2}.fastq.gz'
 reads = channel.fromFilePairs(params.reads)
 ```
 
