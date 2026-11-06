@@ -189,20 +189,43 @@ git push
 ## Code block 021
 
 ```
-mkdir nextflow-course-my-launch
-cd nextflow-course-my-launch/
+mkdir varcall_test
+cd varcall_test/
 export GITHUB_USERNAME="your-github-username"
-nextflow run "$GITHUB_USERNAME/nextflow-course-my" -r full -profile apptainer
+nextflow run "$GITHUB_USERNAME/varcall" -r main -profile apptainer
 ```
 
 ## Code block 022
 
 ```
+workflow variant_calling {
+    take:
+    reads
+    reference
+
+    main:
+    ...
+
+    emit:
+    report = report.out
+}
+
 workflow {
+
+    main:
     reads = channel.fromFilePairs(params.reads)
     reference = channel.fromPath(params.reference).collect()
-    refprepare(reference)
-    align_varcall(reference,refprepare.out.refindex, reads)
+    variant_calling(reads, reference)
+
+    publish:
+    report = variant_calling.out.report
+}
+
+output {
+    report {
+        path 'report'
+        mode 'copy'
+    }
 }
 ```
 
