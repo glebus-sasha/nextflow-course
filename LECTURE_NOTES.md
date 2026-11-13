@@ -274,6 +274,7 @@ API rate limit exceeded -- Provide your GitHub user name and password to get a h
 ## Code block 029
 
 ```
+https://github.com/settings/personal-access-tokens/new
 export GITHUB_TOKEN="ghp_ТВОЙ_ТОКЕН"
 nextflow pull nf-core/sarek
 ```
