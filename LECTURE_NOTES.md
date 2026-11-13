@@ -500,6 +500,24 @@ input  = 'https://raw.githubusercontent.com/glebus-sasha/nextflow-course-templat
 nextflow run .. -profile apptainer,test --outdir results -resume -c custom.config
 ```
 
+## Code block
+```
+   //
+   // MODULE: Run FastP
+   //
+   ch_samplesheet = ch_samplesheet.map { meta, reads ->
+         [ meta, reads, []]
+      }
+   FASTP (
+      ch_samplesheet,
+      false,
+      false,
+      false
+   )
+   ch_trimmed_reads = FASTP.out.reads
+   ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
+```
+
 ## Code block 059
 
 ```
