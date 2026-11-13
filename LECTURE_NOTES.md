@@ -282,7 +282,7 @@ nextflow pull nf-core/sarek
 ## Code block 030
 
 ```
-$HOME/.nextflow/assets/nf-core
+$HOME/.nextflow/assets/.repos/nf-core/
 ```
 
 ## Code block 031
