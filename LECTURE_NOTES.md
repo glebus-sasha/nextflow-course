@@ -453,8 +453,7 @@ nf-core pipelines create --template-yaml  template.yml
 ## Code block 051
 
 ```
-export GITHUB_USERNAME="your-github-username"
-git remote add origin "https://github.com/${GITHUB_USERNAME}/nfcoreintro.git"
+git remote add origin git@github.com:USERNAME/nfcoreintro.git
 ```
 
 ## Code block 052
