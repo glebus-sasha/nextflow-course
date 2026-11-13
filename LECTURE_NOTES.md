@@ -377,7 +377,7 @@ no_intervals    : true
 ## Code block 042
 
 ```
-nextflow run nf-core/sarek -r 3.10.0 -profile apptainer -resume -params-file nf-params.json -c custom.config 
+nextflow run nf-core/sarek -r 3.12.0 -profile apptainer -resume -params-file nf-params.json -c custom.config 
 ```
 
 ## Code block 043
